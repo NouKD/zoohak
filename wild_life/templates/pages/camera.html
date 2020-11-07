@@ -1,0 +1,51 @@
+{% extends 'bases/base.html' %}
+
+{% load static %}
+
+{% block title %}
+eveRY LIfe is Precious | Cameras        
+{% endblock title %}
+
+
+{% block content %}
+	<!--inner block start here-->
+<div class="inner-block">
+    <div class="chart-main-block">
+       <div class="chart-first-line">
+    	<div class="col-md-6 chart-blo-1">
+    	   <div class="dygno">
+    		     <h2>Camera 1</h2>
+				
+				    <canvas id="doughnut" height="300" width="470" style="width: 470px; height: 300px;"></canvas>
+			</div>	
+    	 </div>
+    	<div class="col-md-6 chart-blo-1">
+    	    <div class="line-chart">
+    		<h3>Camera 2</h3>
+    		 <canvas id="line" height="300" width="400" style="width: 400px; height: 300px;"> </canvas>
+
+    	    </div>
+    	  </div>
+    	  <div class="clearfix"> </div>
+    	</div>
+    	<div class="chart-second-line">
+    	<div class="col-md-6 chart-blo-1">
+    	    <div class="polararea">
+    		<h3>Camera 3</h3>
+    		<canvas id="polarArea" height="300" width="300" style="width: 300px; height: 300px;"></canvas>  
+			</div> 		
+    	  </div>   	
+    	<div class="col-md-6 chart-blo-1">
+    		<div class="chart-other">
+	    		<h3>Camera 4</h3> 		
+				<canvas id="pie" height="315" width="470" style="width: 470px; height: 315px;"></canvas>
+
+            </div>
+    	</div>
+    	<div class="clearfix"> </div>
+    	</div>
+    </div>
+</div>
+<!--inner block end here-->
+{% endblock content %}
+	
