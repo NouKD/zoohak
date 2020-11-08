@@ -30,7 +30,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href='//fonts.googleapis.com/css?family=Work+Sans:400,500,600' rel='stylesheet' type='text/css'>
 <!--static chart-->
 <script src="{% static 'js/Chart.min.js' %}"></script>
-<!--//charts-->
+
 </head>
 <body>	
 <div class="page-container">	
@@ -41,7 +41,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<div class="header-left">
 							<div class="logo-name">
 									 <a href="{% url 'index' %}"> 
-									<img id="logo" src="{% static 'images/logo_zoo1.png' %}" alt="Logo"  width='70%' /> 
+									<img id="logo" src="{{ website.logo.url }}" alt="Logo"  width='70%' /> 
 								  </a> 								
 							</div>
 
@@ -57,21 +57,31 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<ul>
 									<li class="dropdown profile_details_drop">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-											<div class="profile_img">	
-												<span class="prfil-img"><img src="{% static 'images/p1.png' %}" alt=""> </span> 
-												<div class="user-name">
-													<p>Malorum</p>
-													<span>Administrator</span>
-												</div>
-												<i class="fa fa-angle-down lnr"></i>
-												<i class="fa fa-angle-up lnr"></i>
-												<div class="clearfix"></div>	
-											</div>	
+											{% if request.user.is_authenticated %}
+												<div class="profile_img">	
+													<span class="prfil-img"><img style='width:50px;height:50px;border:2px solid forestgreen;border-radius:50%' src="{{ request.user.photoprofile }}" alt=""> </span> 
+													<div class="user-name">
+														<p>{{ request.user.get_full_name }}</p>
+														{% if request.user.is_admin %}
+															<span>Administrator</span>
+															{% else %}
+															<span>Visitor</span>
+														{% endif %}
+													</div>
+													<i class="fa fa-angle-down lnr"></i>
+													<i class="fa fa-angle-up lnr"></i>
+													<div class="clearfix"></div>	
+												</div>	
+											{% endif %}
 										</a>
 										<ul class="dropdown-menu drp-mnu">
-											<li> <a href="#"><i class="fa fa-cog"></i> Settings</a> </li> 
-											<li> <a href="#"><i class="fa fa-user"></i> Profile</a> </li> 
-											<li> <a href="#"><i class="fa fa-sign-out"></i> Logout</a> </li>
+											{% comment %} <li> <a href="#"><i class="fa fa-cog"></i> Settings</a> </li> 
+											<li> <a href="#"><i class="fa fa-user"></i> Profile</a> </li> {% endcomment %}
+											{% if request.user.is_authenticated %}
+												<li> <a href="{% url 'logout_view' %}"><i class="fa fa-sign-out"></i> Logout</a> </li>
+											{% else %}
+												<li> <a href="{% url 'signup' %}"><i class="fa fa-sign-out"></i> Login</a> </li>
+											{% endif %}
 										</ul>
 									</li>
 								</ul>
@@ -106,27 +116,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
         <!--copy rights start here-->
 <div class="copyrights">
-    <p>© 2020 RYLIP.  All Rights Reserved | eveRY LIfe is Precious</p>
+    <p>{{ website.copyright }}</p>
 </div>	
 <!--COPY rights end here-->
 </div>
 </div>
 <!--slider menu-->
-  <div class="sidebar-menu">
-            <div class="logo"> <a href="#" class="sidebar-icon"> <span class="fa fa-bars"></span> </a> <a href="#"> <span id="logo" ></span> 
-                <!--<img id="logo" src="" alt="Logo"/>--> 
-            </a> </div>		  
-          <div class="menu">
-            <ul id="menu" >
-              <li id="menu-home" ><a href="{% url 'index' %}"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>
+	<div class="sidebar-menu">
+			<div class="logo"> <a href="#" class="sidebar-icon"> <span class="fa fa-bars"></span> </a> <a href="#"> <span id="logo" ></span> 
+				<!--<img id="logo" src="" alt="Logo"/>--> 
+			</a> </div>		  
+			<div class="menu">
+			<ul id="menu" >
+				<li id="menu-home" ><a href="{% url 'index' %}"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>
 
-              <li><a href="{% url 'about' %}"><i class="fa fa-file-text"></i><span>A propos</span></a></li>
-              <li><a href="{% url 'signup' %}"><i class="fa fa-sign-in"></i><span>Connexion</span></a></li>
-              
-              <li><a href="{% url 'camera' %}"><i class="fa fa-bar-chart"></i><span>Cameras</span></a></li>
-            </ul>
-          </div>
-   </div>
+				<li><a href="{% url 'about' %}"><i class="fa fa-file-text"></i><span>A propos</span></a></li>
+				{% if not request.user.is_authenticated %}
+					<li><a href="{% url 'signup' %}"><i class="fa fa-sign-in"></i><span>Connexion</span></a></li>
+				{% endif %}
+				
+				<li><a href="{% url 'camera' %}"><i class="fa fa-bar-chart"></i><span>Cameras</span></a></li>
+			</ul>
+			</div>
+	</div>
   <div class="clearfix"> </div>
 </div>
 <!--slide bar menu end here-->
@@ -146,8 +158,8 @@ else
     $("#menu span").css({"position":"relative"});
   }, 400);
 }               
-              toggle = !toggle;
-          });
+toggle = !toggle;
+});
 </script>
 <!--scrolling js-->
       <script src="{% static 'js/jquery.nicescroll.js' %}"></script>

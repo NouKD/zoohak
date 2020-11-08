@@ -3,25 +3,24 @@
 {% load static %}
 
 {% block title %}
-eveRY LIfe is Precious | About        
+	EVERY LIfe is Precious | About        
 {% endblock title %}
 
 
 {% block content %}
 <!--inner block start here-->
 <div class="inner-block">
-    <div class="blank">
+    <div class="blank mt-4">
     	<h2>A propos </h2>
     	<div class="blankpage-main">
-    		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+    		<p>{{ about.description }}</p>
     	</div>
     </div>
-	<div class="clearfix"></div>
 
-	    <div class="blank">
+	<div class="blank">
     	<h2>En savoir plus </h2>
     	<div class="blankpage-main">
-    		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+    		<p>{{ about.en_savoir_plus }}</p>
     	</div>
     </div>
 

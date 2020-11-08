@@ -1,9 +1,5 @@
 {% load static %}
-<!--Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -29,31 +25,31 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <body>	
 <!--inner block start here-->
 <div class="signup-page-main">
-     <div class="signup-main">  	
+     <div class="signup-main" id='user_login_post'>  	
     	 <div class="signup-head">
 				<h1>Sign Up</h1>
 			</div>
 			<div class="signup-block">
 				<form>
-					<input type="text" name="email" placeholder="Name" required="">
-					<input type="text" name="email" placeholder="Email" required="">
-					<input type="password" name="password" class="lock" placeholder="Password">
+					<input type="text" v-model='login_email' placeholder="Email" class="lock">
+					<input type="password" v-model='login_password' class="lock" placeholder="Password">
 					<div class="forgot-top-grids">
 						<div class="forgot-grid">
 							<ul>
 								<li>
-									<input type="checkbox" id="brand1" value="">
-									<label for="brand1"><span></span>I agree to the terms</label>
+									<input type="checkbox" id="brand1" true-value="true" false-value="false" v-model="accepter">
+									<label for="brand1"><span></span>J'accepte les termes et conditions</label>
 								</li>
 							</ul>
 						</div>
 						
 						<div class="clearfix"> </div>
 					</div>
-					<input type="submit" name="Sign In" value="Sign up">														
+					<input type="submit" @click.prevent='connexionUser' name="Sign In" value="Sign up" v-if='accepter == "true" && !is_submited'>														
+					<input type="submit" name="Sign In" value="Connexion..." v-if='is_submited'>														
 				</form>
 				<div class="sign-down">
-				<h4>Already have an account? <a href="{% url 'signup' %}"> Login here.</a></h4>
+				<h4>Voua n'avez pas de compte ? <a href="#">cliquez ici</a></h4>
 				  <h5><a href="{% url 'index' %}">Go Back to Home</a></h5>
 				</div>
 			</div>
@@ -62,7 +58,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--inner block end here-->
 <!--copy rights start here-->
 <div class="copyrights">
-	  <p>© 2020 RYLIP.  All Rights Reserved | eveRY LIfe is Precious</p>
+	  <p>{{ website.copyright }}</p>
 </div>	
 <!--COPY rights end here-->
 <!--scrolling js-->
@@ -71,9 +67,73 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<!--//scrolling js-->
 <script src="{% static 'js/bootstrap.js' %}"> </script>
 <!-- mother grid end here-->
+
+
+<script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
+<script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script>
+	new Vue({
+		el: '#user_login_post',
+		data: {
+			login_email: "",
+			login_password: "",
+			accepter: "false",
+			is_submited: false,
+		},
+		delimiters: ["${", "}"],
+		methods: {
+			connexionUser: function() {
+				if (!this.login_email || !this.login_password) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Veuillez remplir correctement les champs',
+					});
+				} else {
+					this.is_submited = true
+					let formData = new FormData();
+					formData.append('email', this.login_email);
+					formData.append('password', this.login_password);
+					axios.defaults.xsrfCookieName = 'csrftoken';
+					axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+					axios.post("{% url 'login_post' %}", formData, {})
+					.then((response) => {
+						if (response.data.success) {
+							Swal.fire({
+								icon: 'success',
+								title: response.data.message,
+								showConfirmButton: false,
+								timer: 1500
+							});
+							window.location.replace(response.data.url)
+							this.is_submited = false
+
+						} else {
+							Swal.fire({
+								icon: 'warning',
+								title: response.data.message,
+								timer: 2000
+							});
+							console.log(response.data)
+							this.is_submited = false
+						}
+					})
+					.catch((err) => {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Une erreur est survenu veuillez reessayer',
+							footer: "<a href>Les developpeurs s'excusent pour les desagrements?</a>",
+							timer: 3000
+						});
+						console.log(err);
+						this.is_submited = false
+					})
+				}
+			}
+		},
+	})
+</script>
 </body>
 </html>
-
-
-                      
-						
+				
